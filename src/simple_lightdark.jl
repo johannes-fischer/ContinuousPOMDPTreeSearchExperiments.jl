@@ -4,21 +4,23 @@
     incorrect_r::Float64    = -100.0
     light_loc::Int          = 10
     radius::Int             = 60
+    big_step::Int           = 10
 end
+
 discount(p::SimpleLightDark) = p.discount
 isterminal(p::SimpleLightDark, s::Number) = !(s in -p.radius:p.radius)
 
-const ACTIONS = [-10, -1, 0, 1, 10]
-actions(p::SimpleLightDark) = ACTIONS
+# const ACTIONS = [-10, -1, 0, 1, 10]
+actions(p::SimpleLightDark) = [-p.big_step, -1, 0, 1, p.big_step]
 n_actions(p::SimpleLightDark) = length(actions(p))
-const ACTION_INDS = Dict(a=>i for (i,a) in enumerate(actions(SimpleLightDark())))
-action_index(p::SimpleLightDark, a::Int) = ACTION_INDS[a]
+# const ACTION_INDS = Dict(a=>i for (i,a) in enumerate(actions(SimpleLightDark())))
+action_index(p::SimpleLightDark, a::Int) = findfirst(actions(p), a)
 
 states(p::SimpleLightDark) = -p.radius:p.radius + 1
 n_states(p::SimpleLightDark) = length(states(p))
 state_index(p::SimpleLightDark, s::Int) = s+p.radius+1
 
-function transition(p::SimpleLightDark, s::Int, a::Int) 
+function transition(p::SimpleLightDark, s::Int, a::Int)
     if a == 0
         return SparseCat(SVector(p.radius+1), SVector(1.0))
     else
@@ -100,8 +102,8 @@ function action(p::LDHeuristic, b::AbstractParticleBelief)
         ll = p.p.light_loc
         if m == ll
             return -1*Int(sign(ll))
-        elseif abs(m-ll) >= 10 
-            return -10*Int(sign(m-ll))
+        elseif abs(m-ll) >= p.p.big_step
+            return -p.p.big_step*Int(sign(m-ll))
         else
             return -Int(sign(m-ll))
         end
@@ -121,6 +123,6 @@ function action(p::LDSidePolicy, b)
     if pdf(b, mode(b)) > 0.9
         return action(p.q, b)
     else
-        return 10
+        return p.q.pomdp.big_step
     end
 end

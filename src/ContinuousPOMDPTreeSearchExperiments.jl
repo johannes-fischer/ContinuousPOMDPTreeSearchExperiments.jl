@@ -78,7 +78,13 @@ export
 
     PDPWSolver,
 
-    GBMDPSolver
+    GBMDPSolver,
+
+    reset_distribution
+
+    # EDPWSolver,
+    # EntropyRewardBeliefMDP,
+    # pf_entropy,
 
 
 include("simple_lightdark.jl")
@@ -95,6 +101,11 @@ include("bounds_and_heuristics.jl")
 # include("simulations.jl")
 include("integration.jl")
 include("pomcpdpw.jl")
+
+# include("johannes/edpw_types.jl")
+# include("johannes/edpw.jl")
+# include("johannes/entropy_mdp.jl")
+# include("johannes/entropy_estimation.jl")
 
 n_children(h::BeliefNode) = length(h.children)
 

@@ -6,7 +6,7 @@ end
 function ParticleFilters.resample(r::SymmetricNormalResampler, b::WeightedParticleBelief, rng::AbstractRNG)
     collection = resample(LowVarianceResampler(r.n), b, rng)
     ps = particles(collection)
-    for i in 1:r.n 
+    for i in 1:r.n
         ps[i] += r.std*randn(rng, 2)
     end
     return collection
@@ -96,7 +96,7 @@ end
 
 function max_possible_weight(pomdp::AbstractLD2, a, o)
     od = observation(pomdp, a, o) # will only work for LightDark
-    return pdf(od, o)    
+    return pdf(od, o)
 end
 
 function new_particle(pomdp::AbstractLD2, b, a, o, rng)
@@ -110,7 +110,9 @@ function max_possible_weight(pomdp::SimpleLightDark, a, o)
 end
 
 function new_particle(p::SimpleLightDark, b, a, o, rng)
-    return clamp(round(Int, o + rand(rng, observation(p, o))), -p.radius, p.radius)
+    # return clamp(round(Int, o + rand(rng, observation(p, o))), -p.radius, p.radius)
+    # Das macht mMn mehr Sinn:
+    return clamp(round(Int, rand(rng, observation(p, o))), -p.radius, p.radius)
 end
 
 function max_possible_weight(pomdp::SubHuntPOMDP, a, o)
