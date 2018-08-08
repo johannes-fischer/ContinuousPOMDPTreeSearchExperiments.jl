@@ -77,7 +77,7 @@ initial_state_distribution(p::DSimpleLightDark) = initial_state_distribution(p.s
 
 struct LDHeuristic <: Policy
     p::SimpleLightDark
-    q::QMDPPolicy{SimpleLightDark, Int}
+    q::AlphaVectorPolicy{SimpleLightDark, Int}
     std_thresh::Float64
 end
 
@@ -113,7 +113,7 @@ end
 struct LDSide <: Solver end
 
 mutable struct LDSidePolicy{LD} <: Policy
-    q::QMDPPolicy{LD, Int}
+    q::AlphaVectorPolicy{LD, Int}
 end
 
 solve(solver::LDSide, pomdp::Union{SimpleLightDark,DSimpleLightDark}) = LDSidePolicy(solve(QMDPSolver(), pomdp))
