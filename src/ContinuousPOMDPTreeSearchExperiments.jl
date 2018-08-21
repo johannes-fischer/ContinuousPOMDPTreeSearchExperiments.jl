@@ -112,6 +112,6 @@ n_children(h::BeliefNode) = length(h.children)
 immutable OneStepValue end
 BasicPOMCP.estimate_value(o::OneStepValue, pomdp::POMDP, s, h, steps) = reward(pomdp, s)
 
-Base.srand(p::QMDPPolicy, i::Int) = p
+Base.srand(p::AlphaVectorPolicy, i::Int) = p
 
 end # module

@@ -1,5 +1,5 @@
 type LaserBounds{P<:LaserTagPOMDP}
-    ubp::QMDPPolicy{P, Int}
+    ubp::AlphaVectorPolicy{P, Int}
     lbp::RandomPolicy
     max_depth::Int
     lb_not_same::Float64
@@ -66,11 +66,11 @@ end
 
 init_bounds(l::LaserBounds, p::LaserTagPOMDP, s::DESPOTSolver) = init_bounds(l, p, s.D, s.rng)
 # DESPOT.init_bounds(l::LaserBounds, p::LaserTagPOMDP, c::DESPOT.DESPOTConfig) = init_bounds(l, p, c.search_depth)
-# 
+#
 # function DESPOT.bounds{S}(l::LaserBounds, p::LaserTagPOMDP, b::Vector{DESPOT.DESPOTParticle{S}}, ::DESPOT.DESPOTConfig)
 #     return bounds(l, p, p.state for p in b)
 # end
-# 
+#
 # DESPOT.default_action(l::LaserBounds, pomdp::POMDP, particles, c) = default_action(particles)
 
 function default_action(particles)
@@ -104,7 +104,7 @@ function nogap_tag(b, ex)
 end
 
 
-immutable InevitableInit end 
+immutable InevitableInit end
 
 POMCPOW.init_N(m::InevitableInit, pomdp::LaserTagPOMDP, h::BeliefNode, a::Int) = h.node == 1 ? 0 : 1
 
@@ -156,7 +156,7 @@ MCTS.next_action(gen::RootToNextMLFirst, p::Union{GenerativeBeliefMDP,MeanReward
 #     end
 # end
 
-struct ModeMDP <: Policy 
+struct ModeMDP <: Policy
     vi::ValueIterationPolicy
 end
 
